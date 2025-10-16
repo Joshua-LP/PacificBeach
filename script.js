@@ -79,13 +79,21 @@ function initFormValidation() {
   const form = document.querySelector('.contact-form');
   if (!form) return;
 
+  // Crear iframe oculto si no existe
+  if (!document.getElementById('hidden_iframe')) {
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe';
+    iframe.id = 'hidden_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+  }
+
   form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nombre = form.querySelector('input[placeholder*="Nombre"]');
-    const telefono = form.querySelector('input[placeholder*="Teléfono"]');
-    const email = form.querySelector('input[placeholder*="electrónico"]');
-    const mensaje = form.querySelector('textarea');
+    // No prevenir el envío, dejar que se envíe a Google Forms
+    const nombre = form.querySelector('input[name="entry.466729256"]');
+    const telefono = form.querySelector('input[name="entry.881075350"]');
+    const email = form.querySelector('input[name="entry.179096599"]');
+    const mensaje = form.querySelector('textarea[name="entry.439370938"]');
     
     // Validación básica
     let isValid = true;
@@ -114,12 +122,15 @@ function initFormValidation() {
       errorMessage += 'Por favor ingresa tu mensaje.\n';
     }
     
-    if (isValid) {
-      // Aquí iría la lógica para enviar el formulario
-      showSuccessMessage();
-      form.reset();
-    } else {
+    if (!isValid) {
+      e.preventDefault();
       alert(errorMessage);
+    } else {
+      // Mostrar mensaje de éxito después de un pequeño delay
+      setTimeout(() => {
+        showSuccessMessage();
+        form.reset();
+      }, 500);
     }
   });
 }
