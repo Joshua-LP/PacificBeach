@@ -578,6 +578,26 @@ function addAnimationStyles() {
   document.head.appendChild(style);
 }
 
+// ========== ANIMACIÓN IMAGEN FLOTANTE ==========
+function initFloatingImageAnimation() {
+  const floatingImage = document.querySelector('.floating-image-right');
+  if (!floatingImage) return;
+
+  // Hacer que la imagen sea clickeable para contacto
+  floatingImage.style.cursor = 'pointer';
+  floatingImage.addEventListener('click', function() {
+    const contactSection = document.querySelector('#contacto');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  // Animación adicional al hacer hover
+  floatingImage.addEventListener('mouseenter', function() {
+    this.style.transition = 'transform 0.3s ease';
+  });
+}
+
 // ========== INICIALIZAR TODO ==========
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar componentes
@@ -597,6 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initTypingEffect();
   initProjectModals();
   addAnimationStyles();
+  initFloatingImageAnimation();
   
   // Log para confirmar inicialización
   console.log('Pacific Beach - Website inicializado correctamente');

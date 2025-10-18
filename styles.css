@@ -219,6 +219,36 @@ body {
   100% { top: 30px; opacity: 0; }
 }
 
+/* ========== IMAGEN FLOTANTE DERECHA ========== */
+.floating-image-right {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 998;
+  animation: floatAnimation 3s ease-in-out infinite;
+}
+
+.floating-image-right img {
+  width: 280px;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.floating-image-right img:hover {
+  transform: scale(1.05);
+}
+
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    transform: translateY(-50%) translateX(-10px);
+  }
+}
+
 /* ========== SECCIONES GENERALES ========== */
 .section {
   padding: 80px 40px;
@@ -311,7 +341,7 @@ body {
 }
 
 .lot-features li::before {
-  content: '●';
+  content: '◆';
   color: var(--primary-yellow);
   font-size: 1.2rem;
 }
@@ -695,6 +725,31 @@ body {
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* ========== CHAT BUTTON ========== */
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  transition: all 0.3s;
+}
+
+.chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 968px) {
   .nav-container {
@@ -732,6 +787,10 @@ body {
   .testimonials-grid {
     grid-template-columns: 1fr;
   }
+  
+  .floating-image-right {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -745,5 +804,9 @@ body {
   
   .hero-content {
     padding: 0 30px;
+  }
+  
+  .floating-image-right {
+    display: none;
   }
 }
