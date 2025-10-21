@@ -741,6 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
   new PricingCarousel();
   new TestimonialsCarousel();
   
+  initMobileMenu();
   initSmoothScroll();
   initNavbarScroll();
   initFormValidation();
@@ -757,6 +758,39 @@ document.addEventListener('DOMContentLoaded', function() {
   // Log para confirmar inicialización
   console.log('✅ Pacific Beach - Website inicializado correctamente');
 });
+
+// ========== MENÚ MÓVIL ==========
+function initMobileMenu() {
+  const menuToggle = document.querySelector('.mobile-menu-toggle');
+  const navWrapper = document.querySelector('.nav-wrapper');
+  const navLinks = document.querySelectorAll('.nav-menu a');
+  
+  if (!menuToggle || !navWrapper) return;
+  
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    navWrapper.classList.toggle('active');
+    document.body.style.overflow = navWrapper.classList.contains('active') ? 'hidden' : '';
+  });
+  
+  // Cerrar menú al hacer clic en un enlace
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('active');
+      navWrapper.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+  
+  // Cerrar menú al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (!navWrapper.contains(e.target) && !menuToggle.contains(e.target) && navWrapper.classList.contains('active')) {
+      menuToggle.classList.remove('active');
+      navWrapper.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+}
 
 // ========== MANEJO DE RESIZE ==========
 let resizeTimer;
