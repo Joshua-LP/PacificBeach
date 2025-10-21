@@ -2,6 +2,7 @@
 class HeroCarousel {
   constructor() {
     this.slides = document.querySelectorAll('.hero-slide');
+    this.indicators = document.querySelectorAll('.indicator');
     this.currentSlide = 0;
     this.slideInterval = null;
     this.init();
@@ -11,18 +12,28 @@ class HeroCarousel {
     if (this.slides.length > 0) {
       this.showSlide(0);
       this.startAutoplay();
+      this.initControls();
+      this.initIndicators();
     }
   }
 
   showSlide(index) {
     this.slides.forEach(slide => slide.classList.remove('active'));
+    this.indicators.forEach(ind => ind.classList.remove('active'));
+    
     this.currentSlide = index;
     this.slides[this.currentSlide].classList.add('active');
+    this.indicators[this.currentSlide].classList.add('active');
   }
 
   nextSlide() {
     const next = (this.currentSlide + 1) % this.slides.length;
     this.showSlide(next);
+  }
+
+  prevSlide() {
+    const prev = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+    this.showSlide(prev);
   }
 
   startAutoplay() {
@@ -33,6 +44,133 @@ class HeroCarousel {
     if (this.slideInterval) {
       clearInterval(this.slideInterval);
     }
+  }
+
+  initControls() {
+    const prevBtn = document.querySelector('.hero-nav-btn.prev');
+    const nextBtn = document.querySelector('.hero-nav-btn.next');
+    
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        this.stopAutoplay();
+        this.prevSlide();
+        this.startAutoplay();
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        this.stopAutoplay();
+        this.nextSlide();
+        this.startAutoplay();
+      });
+    }
+  }
+
+  initIndicators() {
+    this.indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        this.stopAutoplay();
+        this.showSlide(index);
+        this.startAutoplay();
+      });
+    });
+  }
+}
+
+// ========== CAROUSEL DE PRECIOS ==========
+class PricingCarousel {
+  constructor() {
+    this.carousel = document.querySelector('.pricing-carousel');
+    this.prevBtn = document.querySelector('.pricing-carousel-container .carousel-btn.prev');
+    this.nextBtn = document.querySelector('.pricing-carousel-container .carousel-btn.next');
+    this.init();
+  }
+
+  init() {
+    if (!this.carousel) return;
+    
+    if (this.prevBtn) {
+      this.prevBtn.addEventListener('click', () => this.scroll(-400));
+    }
+    
+    if (this.nextBtn) {
+      this.nextBtn.addEventListener('click', () => this.scroll(400));
+    }
+    
+    // Touch events para móvil
+    this.initTouchEvents();
+  }
+
+  scroll(amount) {
+    this.carousel.scrollBy({
+      left: amount,
+      behavior: 'smooth'
+    });
+  }
+
+  initTouchEvents() {
+    let startX = 0;
+    let scrollLeft = 0;
+    
+    this.carousel.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX;
+      scrollLeft = this.carousel.scrollLeft;
+    });
+    
+    this.carousel.addEventListener('touchmove', (e) => {
+      const x = e.touches[0].pageX;
+      const walk = (startX - x) * 2;
+      this.carousel.scrollLeft = scrollLeft + walk;
+    });
+  }
+}
+
+// ========== CAROUSEL DE TESTIMONIOS ==========
+class TestimonialsCarousel {
+  constructor() {
+    this.carousel = document.querySelector('.testimonials-carousel');
+    this.prevBtn = document.querySelector('.testimonials-carousel-container .carousel-btn.prev');
+    this.nextBtn = document.querySelector('.testimonials-carousel-container .carousel-btn.next');
+    this.init();
+  }
+
+  init() {
+    if (!this.carousel) return;
+    
+    if (this.prevBtn) {
+      this.prevBtn.addEventListener('click', () => this.scroll(-380));
+    }
+    
+    if (this.nextBtn) {
+      this.nextBtn.addEventListener('click', () => this.scroll(380));
+    }
+    
+    // Touch events para móvil
+    this.initTouchEvents();
+  }
+
+  scroll(amount) {
+    this.carousel.scrollBy({
+      left: amount,
+      behavior: 'smooth'
+    });
+  }
+
+  initTouchEvents() {
+    let startX = 0;
+    let scrollLeft = 0;
+    
+    this.carousel.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX;
+      scrollLeft = this.carousel.scrollLeft;
+    });
+    
+    this.carousel.addEventListener('touchmove', (e) => {
+      const x = e.touches[0].pageX;
+      const walk = (startX - x) * 2;
+      this.carousel.scrollLeft = scrollLeft + walk;
+    });
   }
 }
 
@@ -45,9 +183,11 @@ function initSmoothScroll() {
         e.preventDefault();
         const target = document.querySelector(href);
         if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+          const offset = 80;
+          const targetPosition = target.offsetTop - offset;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
           });
         }
       }
@@ -65,9 +205,11 @@ function initNavbarScroll() {
     const currentScroll = window.pageYOffset;
     
     if (currentScroll > 100) {
-      navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.4)';
+      navbar.style.boxShadow = '0 6px 30px rgba(0, 0, 0, 0.3)';
+      navbar.style.backdropFilter = 'blur(15px)';
     } else {
-      navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
+      navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+      navbar.style.backdropFilter = 'blur(10px)';
     }
     
     lastScroll = currentScroll;
@@ -89,7 +231,6 @@ function initFormValidation() {
   }
 
   form.addEventListener('submit', function(e) {
-    // No prevenir el envío, dejar que se envíe a Google Forms
     const nombre = form.querySelector('input[name="entry.466729256"]');
     const telefono = form.querySelector('input[name="entry.881075350"]');
     const email = form.querySelector('input[name="entry.179096599"]');
@@ -124,7 +265,7 @@ function initFormValidation() {
     
     if (!isValid) {
       e.preventDefault();
-      alert(errorMessage);
+      showErrorMessage(errorMessage);
     } else {
       // Mostrar mensaje de éxito después de un pequeño delay
       setTimeout(() => {
@@ -142,23 +283,96 @@ function isValidEmail(email) {
 
 function showSuccessMessage() {
   const message = document.createElement('div');
+  message.className = 'notification success';
+  message.innerHTML = `
+    <div class="notification-content">
+      <span class="notification-icon">✓</span>
+      <div>
+        <strong>¡Mensaje enviado exitosamente!</strong>
+        <p>Nos contactaremos contigo pronto.</p>
+      </div>
+    </div>
+  `;
   message.style.cssText = `
     position: fixed;
     top: 100px;
     right: 20px;
-    background: #4CAF50;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
     color: white;
     padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     z-index: 10000;
-    animation: slideIn 0.5s ease;
+    animation: slideInRight 0.5s ease;
+    max-width: 350px;
   `;
-  message.textContent = '¡Mensaje enviado exitosamente! Nos contactaremos contigo pronto.';
+  
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInRight {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(400px); opacity: 0; }
+    }
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .notification-icon {
+      font-size: 2rem;
+      background: rgba(255,255,255,0.2);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  `;
+  document.head.appendChild(style);
+  
   document.body.appendChild(message);
   
   setTimeout(() => {
-    message.style.animation = 'slideOut 0.5s ease';
+    message.style.animation = 'slideOutRight 0.5s ease';
+    setTimeout(() => message.remove(), 500);
+  }, 4000);
+}
+
+function showErrorMessage(text) {
+  const message = document.createElement('div');
+  message.className = 'notification error';
+  message.innerHTML = `
+    <div class="notification-content">
+      <span class="notification-icon">⚠</span>
+      <div>
+        <strong>Error en el formulario</strong>
+        <p>${text.replace(/\n/g, '<br>')}</p>
+      </div>
+    </div>
+  `;
+  message.style.cssText = `
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #f44336, #da190b);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10000;
+    animation: slideInRight 0.5s ease;
+    max-width: 350px;
+  `;
+  
+  document.body.appendChild(message);
+  
+  setTimeout(() => {
+    message.style.animation = 'slideOutRight 0.5s ease';
     setTimeout(() => message.remove(), 500);
   }, 4000);
 }
@@ -180,13 +394,13 @@ function initScrollAnimations() {
   }, observerOptions);
 
   const animateElements = document.querySelectorAll(
-    '.lot-card, .pricing-card, .testimonial-card, .contact-info-card'
+    '.lot-card, .pricing-card, .testimonial-card, .contact-info-card, .refiere-step'
   );
   
   animateElements.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
     observer.observe(el);
   });
 }
@@ -197,15 +411,155 @@ function initCTAButtons() {
   
   ctaButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-      if (this.getAttribute('href') === '#' || !this.getAttribute('href')) {
+      if (this.textContent.includes('información')) {
         e.preventDefault();
-        const proyectosSection = document.querySelector('#proyectos');
-        if (proyectosSection) {
-          proyectosSection.scrollIntoView({ behavior: 'smooth' });
-        }
+        showInfoModal(this);
       }
     });
   });
+}
+
+// ========== MODAL DE INFORMACIÓN ==========
+function showInfoModal(button) {
+  const card = button.closest('.pricing-card');
+  const lotSize = card.querySelector('.pricing-lot-size').textContent;
+  const price = card.querySelector('.pricing-amount').textContent;
+  
+  const modal = document.createElement('div');
+  modal.className = 'info-modal';
+  modal.innerHTML = `
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <button class="modal-close">×</button>
+      <h2>Lote de ${lotSize}</h2>
+      <p class="modal-price">${price}</p>
+      <p>¿Te interesa este lote? Contáctanos para más información y agenda una visita.</p>
+      <div class="modal-actions">
+        <a href="https://wa.me/51933597955?text=Hola, estoy interesado en el lote de ${lotSize}" class="modal-btn whatsapp" target="_blank">
+          💬 WhatsApp
+        </a>
+        <a href="#contacto" class="modal-btn contact">
+          📧 Formulario
+        </a>
+      </div>
+    </div>
+  `;
+  
+  const style = document.createElement('style');
+  style.textContent = `
+    .info-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+      position: relative;
+      background: white;
+      max-width: 500px;
+      padding: 40px;
+      border-radius: 20px;
+      z-index: 10001;
+      animation: slideUp 0.3s ease;
+      text-align: center;
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s;
+    }
+    .modal-close:hover {
+      color: #333;
+    }
+    .modal-content h2 {
+      color: var(--navy-blue);
+      margin-bottom: 10px;
+    }
+    .modal-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-yellow);
+      margin-bottom: 20px;
+    }
+    .modal-content p {
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    .modal-btn.whatsapp {
+      background: #25D366;
+      color: white;
+    }
+    .modal-btn.whatsapp:hover {
+      background: #20ba5a;
+      transform: translateY(-2px);
+    }
+    .modal-btn.contact {
+      background: var(--primary-yellow);
+      color: var(--navy-blue);
+    }
+    .modal-btn.contact:hover {
+      background: #FFA500;
+      transform: translateY(-2px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  
+  const closeModal = () => {
+    modal.style.animation = 'fadeOut 0.3s ease';
+    setTimeout(() => {
+      modal.remove();
+      document.body.style.overflow = '';
+    }, 300);
+  };
+  
+  modal.querySelector('.modal-close').addEventListener('click', closeModal);
+  modal.querySelector('.modal-overlay').addEventListener('click', closeModal);
+  modal.querySelector('.modal-btn.contact').addEventListener('click', closeModal);
 }
 
 // ========== WHATSAPP BUTTON ==========
@@ -240,7 +594,7 @@ function initCounterAnimation() {
           current = target;
           clearInterval(timer);
         }
-        element.textContent = text.replace(/\d+/, Math.floor(current));
+        element.textContent = text.replace(/\d+/, Math.floor(current).toLocaleString());
       }, 16);
     }
   };
@@ -257,35 +611,19 @@ function initCounterAnimation() {
   counters.forEach(counter => observer.observe(counter));
 }
 
-// ========== LAZY LOADING IMAGES ==========
-function initLazyLoading() {
-  const images = document.querySelectorAll('img[data-src]');
-  
-  const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        imageObserver.unobserve(img);
-      }
-    });
-  });
-
-  images.forEach(img => imageObserver.observe(img));
-}
-
 // ========== PARALLAX EFFECT ==========
 function initParallax() {
   const heroSlides = document.querySelectorAll('.hero-slide');
   
   window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
-    heroSlides.forEach(slide => {
-      if (slide.classList.contains('active')) {
-        slide.style.transform = `translateY(${scrolled * 0.5}px)`;
-      }
-    });
+    if (scrolled < 800) {
+      heroSlides.forEach(slide => {
+        if (slide.classList.contains('active')) {
+          slide.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+      });
+    }
   });
 }
 
@@ -311,19 +649,6 @@ function initActiveNavigation() {
         link.classList.add('active');
       }
     });
-  });
-}
-
-// ========== PRELOADER ==========
-function initPreloader() {
-  window.addEventListener('load', () => {
-    const preloader = document.querySelector('.preloader');
-    if (preloader) {
-      setTimeout(() => {
-        preloader.style.opacity = '0';
-        setTimeout(() => preloader.remove(), 300);
-      }, 500);
-    }
   });
 }
 
@@ -356,7 +681,7 @@ function initScrollToTop() {
   document.body.appendChild(scrollBtn);
 
   window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
+    if (window.pageYOffset > 500) {
       scrollBtn.style.opacity = '1';
       scrollBtn.style.visibility = 'visible';
     } else {
@@ -373,217 +698,11 @@ function initScrollToTop() {
   });
 }
 
-// ========== TYPING EFFECT ==========
-function initTypingEffect() {
-  const elements = document.querySelectorAll('[data-typing]');
-  
-  elements.forEach(element => {
-    const text = element.textContent;
-    element.textContent = '';
-    element.style.borderRight = '2px solid var(--primary-yellow)';
-    
-    let index = 0;
-    const speed = 50;
-    
-    function type() {
-      if (index < text.length) {
-        element.textContent += text.charAt(index);
-        index++;
-        setTimeout(type, speed);
-      } else {
-        setTimeout(() => {
-          element.style.borderRight = 'none';
-        }, 500);
-      }
-    }
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !element.dataset.typed) {
-          element.dataset.typed = 'true';
-          type();
-        }
-      });
-    }, { threshold: 0.5 });
-    
-    observer.observe(element);
-  });
-}
-
-// ========== MODAL PARA PROYECTOS ==========
-function initProjectModals() {
-  const modalHTML = `
-    <div class="project-modal" style="display: none;">
-      <div class="modal-overlay"></div>
-      <div class="modal-content">
-        <button class="modal-close">&times;</button>
-        <div class="modal-body">
-          <img class="modal-image" src="" alt="">
-          <h2 class="modal-title"></h2>
-          <p class="modal-description"></p>
-          <div class="modal-features"></div>
-          <button class="modal-cta">Contactar Ahora</button>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  document.body.insertAdjacentHTML('beforeend', modalHTML);
-  
-  const modal = document.querySelector('.project-modal');
-  const modalClose = document.querySelector('.modal-close');
-  const modalOverlay = document.querySelector('.modal-overlay');
-  
-  // Estilos del modal
-  const style = document.createElement('style');
-  style.textContent = `
-    .project-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-    }
-    .modal-content {
-      position: relative;
-      background: white;
-      max-width: 800px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 15px;
-      z-index: 10001;
-      animation: modalSlideIn 0.3s ease;
-    }
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--primary-yellow);
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      font-size: 28px;
-      cursor: pointer;
-      z-index: 10002;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-    }
-    .modal-image {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-    }
-    .modal-body {
-      padding: 40px;
-    }
-    .modal-title {
-      font-size: 2.5rem;
-      color: var(--navy-blue);
-      margin: 20px 0;
-    }
-    .modal-description {
-      color: #666;
-      line-height: 1.8;
-      margin-bottom: 30px;
-    }
-    .modal-features {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-    .modal-cta {
-      width: 100%;
-      background: var(--primary-yellow);
-      color: var(--navy-blue);
-      border: none;
-      padding: 18px;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    @keyframes modalSlideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-  `;
-  document.head.appendChild(style);
-  
-  function closeModal() {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-  
-  modalClose.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', closeModal);
-  
-  // Vincular botones de proyectos
-  document.querySelectorAll('.pricing-button, .cta-button').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      if (this.textContent.includes('información')) {
-        e.preventDefault();
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-    });
-  });
-}
-
-// ========== AÑADIR ANIMACIONES CSS ==========
-function addAnimationStyles() {
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideIn {
-      from { transform: translateX(100%); }
-      to { transform: translateX(0); }
-    }
-    @keyframes slideOut {
-      from { transform: translateX(0); }
-      to { transform: translateX(100%); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .nav-menu a.active {
-      color: var(--primary-yellow);
-      position: relative;
-    }
-    .nav-menu a.active::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--primary-yellow);
-    }
-  `;
-  document.head.appendChild(style);
-}
-
 // ========== ANIMACIÓN IMAGEN FLOTANTE ==========
 function initFloatingImageAnimation() {
   const floatingImage = document.querySelector('.floating-image-right');
   if (!floatingImage) return;
 
-  // Hacer que la imagen sea clickeable para contacto
   floatingImage.style.cursor = 'pointer';
   floatingImage.addEventListener('click', function() {
     const contactSection = document.querySelector('#contacto');
@@ -591,17 +710,37 @@ function initFloatingImageAnimation() {
       contactSection.scrollIntoView({ behavior: 'smooth' });
     }
   });
+}
 
-  // Animación adicional al hacer hover
-  floatingImage.addEventListener('mouseenter', function() {
-    this.style.transition = 'transform 0.3s ease';
-  });
+// ========== LAZY LOADING IMAGES ==========
+function initLazyLoading() {
+  const images = document.querySelectorAll('img[loading="lazy"]');
+  
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+
+    images.forEach(img => imageObserver.observe(img));
+  }
 }
 
 // ========== INICIALIZAR TODO ==========
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar componentes
   new HeroCarousel();
+  new PricingCarousel();
+  new TestimonialsCarousel();
+  
   initSmoothScroll();
   initNavbarScroll();
   initFormValidation();
@@ -609,18 +748,14 @@ document.addEventListener('DOMContentLoaded', function() {
   initCTAButtons();
   initWhatsAppButton();
   initCounterAnimation();
-  initLazyLoading();
   initParallax();
   initActiveNavigation();
-  initPreloader();
   initScrollToTop();
-  initTypingEffect();
-  initProjectModals();
-  addAnimationStyles();
   initFloatingImageAnimation();
+  initLazyLoading();
   
   // Log para confirmar inicialización
-  console.log('Pacific Beach - Website inicializado correctamente');
+  console.log('✅ Pacific Beach - Website inicializado correctamente');
 });
 
 // ========== MANEJO DE RESIZE ==========
@@ -628,7 +763,6 @@ let resizeTimer;
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
-    // Recalcular elementos si es necesario
     console.log('Ventana redimensionada');
   }, 250);
 });
@@ -644,7 +778,7 @@ if ('performance' in window) {
     setTimeout(function() {
       const perfData = window.performance.timing;
       const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-      console.log('Tiempo de carga de página:', pageLoadTime + 'ms');
+      console.log('⚡ Tiempo de carga de página:', pageLoadTime + 'ms');
     }, 0);
   });
 }

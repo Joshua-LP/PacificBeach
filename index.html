@@ -20,6 +20,7 @@
             <ul class="nav-menu">
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#proyectos">Proyectos</a></li>
+                <li><a href="#refiere">Refiere y Gana</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
             <div class="nav-contact">
@@ -71,8 +72,13 @@
                 <a href="#proyectos" class="cta-button">Ver Proyectos</a>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="mouse-icon"></div>
+        <button class="hero-nav-btn prev">‹</button>
+        <button class="hero-nav-btn next">›</button>
+        <div class="hero-indicators">
+            <span class="indicator active" data-slide="0"></span>
+            <span class="indicator" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+            <span class="indicator" data-slide="3"></span>
         </div>
     </section>
 
@@ -125,176 +131,231 @@
     </section>
 
     <!-- PRECIOS Y PLANES DE PAGO -->
-    <section class="section" id="proyectos" style="background: var(--light-gray);">
+    <section class="section pricing-section" id="proyectos">
         <div class="section-header">
             <h2 class="section-title">Precios y Planes de Pago</h2>
             <p class="section-subtitle">Opciones flexibles de pago para hacer realidad tu sueño de vivir frente al mar</p>
         </div>
-        <div class="pricing-grid">
-            <!-- LOTE 100m² -->
-            <div class="pricing-card">
-                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800" alt="Lote 100m²" class="pricing-image">
-                <div class="pricing-content">
-                    <div class="pricing-header">
-                        <div class="pricing-lot-info">
-                            <span class="pricing-lot-label">Lote de</span>
-                            <span class="pricing-lot-size">100m²</span>
+        <div class="pricing-carousel-container">
+            <button class="carousel-btn prev">‹</button>
+            <div class="pricing-carousel">
+                <!-- LOTE 100m² -->
+                <div class="pricing-card">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800" alt="Lote 100m²" class="pricing-image">
+                    <div class="pricing-badge">Oferta Especial</div>
+                    <div class="pricing-content">
+                        <div class="pricing-header">
+                            <div class="pricing-lot-info">
+                                <span class="pricing-lot-label">Lote de</span>
+                                <span class="pricing-lot-size">100m²</span>
+                            </div>
+                            <div class="pricing-total">
+                                <div class="pricing-amount">$11,000</div>
+                                <div class="pricing-initial">45% inicial: $4,950</div>
+                            </div>
                         </div>
-                        <div class="pricing-total">
-                            <div class="pricing-amount">$11,000</div>
-                            <div class="pricing-initial">45% inicial: $4,950</div>
+                        
+                        <div class="pricing-plans">
+                            <div class="pricing-plan highlighted">
+                                <div class="plan-discount">Hasta Diciembre - Lotes seleccionados</div>
+                                <div class="plan-price">$7,700 (pago al contado)</div>
+                            </div>
+                            <div class="pricing-plan">
+                                <div class="plan-discount">6 cuotas sin intereses</div>
+                                <div class="plan-price">$1,008/mes</div>
+                            </div>
+                            <div class="pricing-plan">
+                                <div class="plan-discount">12 cuotas sin intereses</div>
+                                <div class="plan-price">$505/mes</div>
+                            </div>
                         </div>
+                        
+                        <div class="pricing-installments">
+                            • Promoción válida hasta diciembre<br>
+                            • Aplica solo a lotes seleccionados
+                        </div>
+                        
+                        <ul class="pricing-features">
+                            <li>Documentación completa</li>
+                            <li>Servicios básicos incluidos</li>
+                            <li>Acceso directo a la playa</li>
+                            <li>Área común recreativa</li>
+                        </ul>
+                        
+                        <button class="pricing-button">Más información</button>
                     </div>
-                    
-                    <div class="pricing-plans">
-                        <div class="pricing-plan highlighted">
-                            <div class="plan-discount">Hasta Diciembre - Lotes seleccionados</div>
-                            <div class="plan-price">$7,700 (pago al contado)</div>
+                </div>
+
+                <!-- LOTE 200m² -->
+                <div class="pricing-card">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800" alt="Lote 200m²" class="pricing-image">
+                    <div class="pricing-badge">Popular</div>
+                    <div class="pricing-content">
+                        <div class="pricing-header">
+                            <div class="pricing-lot-info">
+                                <span class="pricing-lot-label">Lote de</span>
+                                <span class="pricing-lot-size">200m²</span>
+                            </div>
+                            <div class="pricing-total">
+                                <div class="pricing-amount">$25,000</div>
+                                <div class="pricing-initial">45% inicial: $11,250</div>
+                            </div>
                         </div>
-                        <div class="pricing-plan">
-                            <div class="plan-discount">6 cuotas sin intereses</div>
-                            <div class="plan-price">$1,008/mes</div>
+                        
+                        <div class="pricing-plans">
+                            <div class="pricing-plan highlighted">
+                                <div class="plan-discount">Hasta Diciembre - Lotes seleccionados</div>
+                                <div class="plan-price">$17,500 (pago al contado)</div>
+                            </div>
+                            <div class="pricing-plan">
+                                <div class="plan-discount">6 cuotas sin intereses</div>
+                                <div class="plan-price">$2,291/mes</div>
+                            </div>
+                            <div class="pricing-plan">
+                                <div class="plan-discount">12 cuotas sin intereses</div>
+                                <div class="plan-price">$1,146/mes</div>
+                            </div>
                         </div>
-                        <div class="pricing-plan">
-                            <div class="plan-discount">12 cuotas sin intereses</div>
-                            <div class="plan-price">$505/mes</div>
+                        
+                        <div class="pricing-installments">
+                            • Promoción válida hasta diciembre<br>
+                            • Aplica solo a lotes seleccionados
                         </div>
+                        
+                        <ul class="pricing-features">
+                            <li>Documentación completa</li>
+                            <li>Servicios básicos incluidos</li>
+                            <li>Vista panorámica al mar</li>
+                            <li>Área de estacionamiento</li>
+                            <li>Zona de BBQ común</li>
+                        </ul>
+                        
+                        <button class="pricing-button">Más información</button>
                     </div>
-                    
-                    <div class="pricing-installments">
-                        • Promoción válida hasta diciembre<br>
-                        • Aplica solo a lotes seleccionados
+                </div>
+
+                <!-- LOTE 250m² PREMIUM -->
+                <div class="pricing-card featured">
+                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800" alt="Lote 250m²" class="pricing-image">
+                    <div class="pricing-badge premium">Premium</div>
+                    <div class="pricing-content">
+                        <div class="pricing-header">
+                            <div class="pricing-lot-info">
+                                <span class="pricing-lot-label">Lote de</span>
+                                <span class="pricing-lot-size">250m²</span>
+                            </div>
+                            <div class="pricing-total">
+                                <div class="pricing-amount">$35,000</div>
+                                <div class="pricing-initial">Primera fila - Sin descuento</div>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-plans">
+                            <div class="pricing-plan highlighted">
+                                <div class="plan-discount">Pago al contado</div>
+                                <div class="plan-price">$35,000</div>
+                            </div>
+                            <div class="pricing-plan">
+                                <div class="plan-discount">Pago en 2 cuotas sin intereses</div>
+                                <div class="plan-price">$17,500 cada una</div>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-installments">
+                            • Lotes en primera fila<br>
+                            • Disponibilidad limitada
+                        </div>
+                        
+                        <ul class="pricing-features">
+                            <li>Documentación completa</li>
+                            <li>Servicios básicos incluidos</li>
+                            <li>Primera línea de playa</li>
+                            <li>Acceso privado al mar</li>
+                            <li>Área de estacionamiento</li>
+                            <li>Casa club exclusiva</li>
+                        </ul>
+                        
+                        <button class="pricing-button">Más información</button>
                     </div>
-                    
-                    <ul class="pricing-features">
-                        <li>Documentación completa</li>
-                        <li>Servicios básicos incluidos</li>
-                        <li>Acceso directo a la playa</li>
-                        <li>Área común recreativa</li>
-                    </ul>
-                    
-                    <button class="pricing-button">Más información</button>
                 </div>
             </div>
+            <button class="carousel-btn next">›</button>
+        </div>
+    </section>
 
-            <!-- LOTE 200m² -->
-            <div class="pricing-card">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800" alt="Lote 200m²" class="pricing-image">
-                <div class="pricing-content">
-                    <div class="pricing-header">
-                        <div class="pricing-lot-info">
-                            <span class="pricing-lot-label">Lote de</span>
-                            <span class="pricing-lot-size">200m²</span>
-                        </div>
-                        <div class="pricing-total">
-                            <div class="pricing-amount">$25,000</div>
-                            <div class="pricing-initial">45% inicial: $11,250</div>
-                        </div>
-                    </div>
-                    
-                    <div class="pricing-plans">
-                        <div class="pricing-plan highlighted">
-                            <div class="plan-discount">Hasta Diciembre - Lotes seleccionados</div>
-                            <div class="plan-price">$17,500 (pago al contado)</div>
-                        </div>
-                        <div class="pricing-plan">
-                            <div class="plan-discount">6 cuotas sin intereses</div>
-                            <div class="plan-price">$2,291/mes</div>
-                        </div>
-                        <div class="pricing-plan">
-                            <div class="plan-discount">12 cuotas sin intereses</div>
-                            <div class="plan-price">$1,146/mes</div>
-                        </div>
-                    </div>
-                    
-                    <div class="pricing-installments">
-                        • Promoción válida hasta diciembre<br>
-                        • Aplica solo a lotes seleccionados
-                    </div>
-                    
-                    <ul class="pricing-features">
-                        <li>Documentación completa</li>
-                        <li>Servicios básicos incluidos</li>
-                        <li>Vista panorámica al mar</li>
-                        <li>Área de estacionamiento</li>
-                        <li>Zona de BBQ común</li>
-                    </ul>
-                    
-                    <button class="pricing-button">Más información</button>
-                </div>
+    <!-- REFIERE Y GANA -->
+    <section class="section refiere-section" id="refiere">
+        <div class="refiere-container">
+            <div class="refiere-header">
+                <h2 class="section-title">🌴 Refiere y Gana 💰</h2>
+                <p class="section-subtitle">Comparte Pacific Beach y recibe hasta $2,400 por cada referido</p>
             </div>
+            
+            <div class="refiere-content">
+                <div class="refiere-intro">
+                    <p>En Pacific Beach valoramos la confianza de nuestros clientes. Por eso hemos creado un beneficio exclusivo: <strong>¡Nuestro programa de referidos "Refiere y Gana"!</strong></p>
+                    <p>Si eres propietario o copropietario de un lote en Pacific Beach, ahora puedes invitar a tus amigos y familiares a ser parte de nuestra comunidad y recibir recompensas por ello.</p>
+                </div>
 
-            <!-- LOTE 250m² PREMIUM -->
-            <div class="pricing-card featured">
-                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800" alt="Lote 250m²" class="pricing-image">
-                <div class="pricing-content">
-                    <div class="pricing-header">
-                        <div class="pricing-lot-info">
-                            <span class="pricing-lot-label">Lote de</span>
-                            <span class="pricing-lot-size">250m²</span>
-                        </div>
-                        <div class="pricing-total">
-                            <div class="pricing-amount">$35,000</div>
-                            <div class="pricing-initial">Primera fila - Sin descuento</div>
-                        </div>
+                <div class="refiere-steps">
+                    <div class="refiere-step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">💬</div>
+                        <h3>Recomienda Pacific Beach</h3>
+                        <p>Comparte tu experiencia y habla con tus conocidos sobre nuestra comunidad.</p>
                     </div>
-                    
-                    <div class="pricing-plans">
-                        <div class="pricing-plan highlighted">
-                            <div class="plan-discount">Pago al contado</div>
-                            <div class="plan-price">$35,000</div>
-                        </div>
-                        <div class="pricing-plan">
-                            <div class="plan-discount">Pago en 2 cuotas sin intereses</div>
-                            <div class="plan-price">$17,500 cada una</div>
-                        </div>
+                    <div class="refiere-step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">🏡</div>
+                        <h3>Tu referido compra un lote</h3>
+                        <p>Si alguno de tus invitados concreta una compra, tú ganas una comisión especial.</p>
                     </div>
-                    
-                    <div class="pricing-installments">
-                        • Lotes en primera fila<br>
-                        • Disponibilidad limitada
+                    <div class="refiere-step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">💵</div>
+                        <h3>Recibe tu recompensa</h3>
+                        <p>Obtén hasta <strong>$2,400</strong> por cada venta concretada gracias a tus referidos.</p>
                     </div>
-                    
-                    <ul class="pricing-features">
-                        <li>Documentación completa</li>
-                        <li>Servicios básicos incluidos</li>
-                        <li>Primera línea de playa</li>
-                        <li>Acceso privado al mar</li>
-                        <li>Área de estacionamiento</li>
-                        <li>Casa club exclusiva</li>
-                    </ul>
-                    
-                    <button class="pricing-button">Más información</button>
+                </div>
+
+                <div class="refiere-cta">
+                    <h3>¿Ya eres propietario en Pacific Beach?</h3>
+                    <p>Empieza a ganar hoy mismo compartiendo nuestra comunidad</p>
+                    <a href="#contacto" class="cta-button">Más información</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- TESTIMONIOS -->
-    <section class="section" id="testimonios">
+    <section class="section testimonials-section" id="testimonios">
         <div class="section-header">
             <h2 class="section-title">Testimonios de Nuestros Clientes</h2>
             <p class="section-subtitle">Conoce las experiencias de quienes ya confiaron en Pacific Beach</p>
         </div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <img src="https://i.ibb.co/XrqyZ5tz/Samuel-Lopez.jpg" alt="Samuel Lopez" class="testimonial-avatar">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"Comprar un lote ha sido una excelente decisión de inversión. La ubicación es increíble, con una vista al mar que es impresionante. Es fácil imaginar lo que será este lugar en el futuro, y eso me da mucha confianza."</p>
-                <div class="testimonial-name">Samuel Lopez</div>
+        <div class="testimonials-carousel-container">
+            <button class="carousel-btn prev testimonials">‹</button>
+            <div class="testimonials-carousel">
+                <div class="testimonial-card">
+                    <img src="https://i.ibb.co/XrqyZ5tz/Samuel-Lopez.jpg" alt="Samuel Lopez" class="testimonial-avatar">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Comprar un lote ha sido una excelente decisión de inversión. La ubicación es increíble, con una vista al mar que es impresionante. Es fácil imaginar lo que será este lugar en el futuro, y eso me da mucha confianza."</p>
+                    <div class="testimonial-name">Samuel Lopez</div>
+                </div>
+                <div class="testimonial-card">
+                    <img src="https://i.ibb.co/3mbbTKML/Estefany-Walters.jpg" alt="Estefany Walters" class="testimonial-avatar">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Comprar mi propiedad en Pacific Beach fue una decisión fácil gracias a la atención que recibí del equipo. Fueron muy claros y profesionales en todo momento, lo que me dio mucha seguridad en mi inversión. Estoy emocionado por el futuro de este proyecto."</p>
+                    <div class="testimonial-name">Estefany Walters</div>
+                </div>
+                <div class="testimonial-card">
+                    <img src="https://i.ibb.co/Xqx7Tpq/Miguel-Hernando.jpg" alt="Miguel Hernando" class="testimonial-avatar">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Aunque es un lugar en desarrollo, la ubicación es increíble y las vistas al mar son buenas. No solo siento que hice una inversión segura, sino que también estoy emocionado por el futuro de la comunidad aquí."</p>
+                    <div class="testimonial-name">Miguel Hernando</div>
+                </div>
             </div>
-            <div class="testimonial-card">
-                <img src="https://i.ibb.co/3mbbTKML/Estefany-Walters.jpg" alt="Estefany Walters" class="testimonial-avatar">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"Comprar mi propiedad en Pacific Beach fue una decisión fácil gracias a la atención que recibí del equipo. Fueron muy claros y profesionales en todo momento, lo que me dio mucha seguridad en mi inversión. Estoy emocionado por el futuro de este proyecto."</p>
-                <div class="testimonial-name">Estefany Walters</div>
-            </div>
-            <div class="testimonial-card">
-                <img src="https://i.ibb.co/Xqx7Tpq/Miguel-Hernando.jpg" alt="Miguel Hernando" class="testimonial-avatar">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"Aunque es un lugar en desarrollo, la ubicación es increíble y las vistas al mar son buenas. No solo siento que hice una inversión segura, sino que también estoy emocionado por el futuro de la comunidad aquí."</p>
-                <div class="testimonial-name">Miguel Hernando</div>
-            </div>
+            <button class="carousel-btn next testimonials">›</button>
         </div>
     </section>
 
@@ -384,5 +445,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>
