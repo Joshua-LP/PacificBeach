@@ -78,51 +78,237 @@ class HeroCarousel {
   }
 }
 
-// ========== CAROUSEL DE PRECIOS ==========
-class PricingCarousel {
+// ========== MODAL OFERTA ESPECIAL MEJORADO ==========
+class OfferModal {
   constructor() {
-    this.carousel = document.querySelector('.pricing-carousel');
-    this.prevBtn = document.querySelector('.pricing-carousel-container .carousel-btn.prev');
-    this.nextBtn = document.querySelector('.pricing-carousel-container .carousel-btn.next');
+    this.currentOffer = null;
     this.init();
   }
 
   init() {
-    if (!this.carousel) return;
-    
-    if (this.prevBtn) {
-      this.prevBtn.addEventListener('click', () => this.scroll(-400));
-    }
-    
-    if (this.nextBtn) {
-      this.nextBtn.addEventListener('click', () => this.scroll(400));
-    }
-    
-    // Touch events para móvil
-    this.initTouchEvents();
-  }
-
-  scroll(amount) {
-    this.carousel.scrollBy({
-      left: amount,
-      behavior: 'smooth'
+    const offerButtons = document.querySelectorAll('.special-offer-btn');
+    offerButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const lotSize = button.dataset.lotSize;
+        const price = parseFloat(button.dataset.price);
+        this.showOfferModal(lotSize, price);
+      });
     });
   }
 
-  initTouchEvents() {
-    let startX = 0;
-    let scrollLeft = 0;
+  showOfferModal(lotSize, price) {
+    this.currentOffer = { lotSize, price };
     
-    this.carousel.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].pageX;
-      scrollLeft = this.carousel.scrollLeft;
+    const modal = document.createElement('div');
+    modal.className = 'offer-modal';
+    modal.innerHTML = `
+      <div class="offer-modal-overlay"></div>
+      <div class="offer-modal-content">
+        <div class="offer-modal-header">
+          <div class="offer-badge">🔥 OFERTA LIMITADA</div>
+          <h2>¡Descuento Especial!</h2>
+          <p>Solo para 5 lotes seleccionados</p>
+          <button class="offer-modal-close">×</button>
+        </div>
+        <div class="offer-modal-body">
+          <div class="offer-info">
+            <h3>🎁 Beneficios Exclusivos</h3>
+            <ul>
+              <li>Descuento del 30% en lotes seleccionados</li>
+              <li>Promoción válida hasta diciembre 2025</li>
+              <li>Solo 5 lotes disponibles con esta oferta</li>
+              <li>Planes de pago flexibles sin intereses</li>
+            </ul>
+          </div>
+          
+          <h3 class="offer-form-title">Completa tus datos para acceder al descuento</h3>
+          
+          <form class="offer-form" id="offerForm">
+            <div class="offer-form-group">
+              <label class="offer-form-label">Nombre completo *</label>
+              <input type="text" class="offer-form-input" name="nombre" required>
+            </div>
+            
+            <div class="offer-form-group">
+              <label class="offer-form-label">Correo electrónico *</label>
+              <input type="email" class="offer-form-input" name="email" required>
+            </div>
+            
+            <div class="offer-form-group">
+              <label class="offer-form-label">Teléfono *</label>
+              <input type="tel" class="offer-form-input" name="telefono" required>
+            </div>
+            
+            <div class="offer-form-group">
+              <label class="offer-form-label">¿Cuándo planeas comprar?</label>
+              <input type="text" class="offer-form-input" name="cuando" placeholder="Ej: En 1 mes, En 3 meses...">
+            </div>
+            
+            <button type="submit" class="offer-form-button">
+              Ver Mi Descuento 🎉
+            </button>
+          </form>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    const closeBtn = modal.querySelector('.offer-modal-close');
+    const overlay = modal.querySelector('.offer-modal-overlay');
+    const form = modal.querySelector('#offerForm');
+    
+    closeBtn.addEventListener('click', () => this.closeModal(modal));
+    overlay.addEventListener('click', () => this.closeModal(modal));
+    form.addEventListener('submit', (e) => this.handleFormSubmit(e, modal));
+  }
+
+  handleFormSubmit(e, modal) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const nombre = formData.get('nombre');
+    const email = formData.get('email');
+    const telefono = formData.get('telefono');
+    
+    if (!nombre || !email || !telefono) {
+      this.showNotification('Por favor completa todos los campos requeridos', 'error');
+      return;
+    }
+    
+    console.log('Datos del formulario:', {
+      nombre,
+      email,
+      telefono,
+      lotSize: this.currentOffer.lotSize,
+      originalPrice: this.currentOffer.price
     });
     
-    this.carousel.addEventListener('touchmove', (e) => {
-      const x = e.touches[0].pageX;
-      const walk = (startX - x) * 2;
-      this.carousel.scrollLeft = scrollLeft + walk;
-    });
+    this.showDiscountReveal(modal);
+  }
+
+  showDiscountReveal(modal) {
+    const modalBody = modal.querySelector('.offer-modal-body');
+    const originalPrice = this.currentOffer.price;
+    const discount = 0.30;
+    const discountedPrice = originalPrice * (1 - discount);
+    
+    modalBody.innerHTML = `
+      <div class="discount-reveal">
+        <div class="discount-reveal-icon">🎊</div>
+        <h3>¡Felicidades!</h3>
+        <p>Has desbloqueado tu descuento exclusivo del 30%</p>
+        
+        <div class="discount-amount">30% DE DESCUENTO</div>
+        
+        <div class="original-price">Precio original: $${originalPrice.toLocaleString()}</div>
+        <div class="discounted-price">Tu precio: $${discountedPrice.toLocaleString()}</div>
+        
+        <p><strong>Ahorras: $${(originalPrice * discount).toLocaleString()}</strong></p>
+        <p>Esta oferta es válida solo para lotes seleccionados y por tiempo limitado.</p>
+        
+        <div class="discount-actions">
+          <button class="discount-btn whatsapp" onclick="window.offerModal.contactWhatsApp()">
+            💬 Contactar por WhatsApp
+          </button>
+          <button class="discount-btn contact" onclick="window.offerModal.scrollToContact()">
+            📧 Ir al formulario
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  contactWhatsApp() {
+    const { lotSize, price } = this.currentOffer;
+    const discount = price * 0.30;
+    const finalPrice = price * 0.70;
+    const message = encodeURIComponent(
+      `¡Hola! Estoy interesado en el lote de ${lotSize} con el descuento especial del 30%. ` +
+      `Precio original: $${price.toLocaleString()}, Precio con descuento: $${finalPrice.toLocaleString()}. ` +
+      `¿Podrían darme más información?`
+    );
+    window.open(`https://wa.me/51933597955?text=${message}`, '_blank');
+  }
+
+  scrollToContact() {
+    this.closeModal(document.querySelector('.offer-modal'));
+    const contactSection = document.querySelector('#contacto');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  closeModal(modal) {
+    modal.style.animation = 'fadeOut 0.3s ease';
+    setTimeout(() => {
+      modal.remove();
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  showNotification(message, type = 'error') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <span class="notification-icon">${type === 'error' ? '⚠' : '✓'}</span>
+        <div>
+          <strong>${type === 'error' ? 'Error' : 'Éxito'}</strong>
+          <p>${message}</p>
+        </div>
+      </div>
+    `;
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'error' ? 'linear-gradient(135deg, #f44336, #da190b)' : 'linear-gradient(135deg, #4CAF50, #45a049)'};
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 10001;
+      animation: slideInRight 0.5s ease;
+      max-width: 350px;
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(400px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(400px); opacity: 0; }
+      }
+      .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .notification-icon {
+        font-size: 2rem;
+        background: rgba(255,255,255,0.2);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.5s ease';
+      setTimeout(() => notification.remove(), 500);
+    }, 4000);
   }
 }
 
@@ -146,7 +332,6 @@ class TestimonialsCarousel {
       this.nextBtn.addEventListener('click', () => this.scroll(380));
     }
     
-    // Touch events para móvil
     this.initTouchEvents();
   }
 
@@ -200,7 +385,6 @@ function initNavbarScroll() {
   const navbar = document.querySelector('.navbar');
   if (!navbar) return;
 
-  let lastScroll = 0;
   window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
     
@@ -211,8 +395,6 @@ function initNavbarScroll() {
       navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
       navbar.style.backdropFilter = 'blur(10px)';
     }
-    
-    lastScroll = currentScroll;
   });
 }
 
@@ -221,7 +403,6 @@ function initFormValidation() {
   const form = document.querySelector('.contact-form');
   if (!form) return;
 
-  // Crear iframe oculto si no existe
   if (!document.getElementById('hidden_iframe')) {
     const iframe = document.createElement('iframe');
     iframe.name = 'hidden_iframe';
@@ -236,7 +417,6 @@ function initFormValidation() {
     const email = form.querySelector('input[name="entry.179096599"]');
     const mensaje = form.querySelector('textarea[name="entry.439370938"]');
     
-    // Validación básica
     let isValid = true;
     let errorMessage = '';
     
@@ -267,7 +447,6 @@ function initFormValidation() {
       e.preventDefault();
       showErrorMessage(errorMessage);
     } else {
-      // Mostrar mensaje de éxito después de un pequeño delay
       setTimeout(() => {
         showSuccessMessage();
         form.reset();
@@ -306,34 +485,6 @@ function showSuccessMessage() {
     animation: slideInRight 0.5s ease;
     max-width: 350px;
   `;
-  
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideInRight {
-      from { transform: translateX(400px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOutRight {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(400px); opacity: 0; }
-    }
-    .notification-content {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .notification-icon {
-      font-size: 2rem;
-      background: rgba(255,255,255,0.2);
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  `;
-  document.head.appendChild(style);
   
   document.body.appendChild(message);
   
@@ -394,7 +545,7 @@ function initScrollAnimations() {
   }, observerOptions);
 
   const animateElements = document.querySelectorAll(
-    '.lot-card, .pricing-card, .testimonial-card, .contact-info-card, .refiere-step'
+    '.pricing-card, .testimonial-card, .contact-info-card, .refiere-step'
   );
   
   animateElements.forEach(el => {
@@ -407,24 +558,20 @@ function initScrollAnimations() {
 
 // ========== BOTONES CTA ==========
 function initCTAButtons() {
-  const ctaButtons = document.querySelectorAll('.cta-button, .pricing-button');
+  const ctaButtons = document.querySelectorAll('.pricing-button');
   
   ctaButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-      if (this.textContent.includes('información')) {
-        e.preventDefault();
-        showInfoModal(this);
-      }
+      e.preventDefault();
+      const lotSize = this.dataset.lotSize;
+      const price = this.dataset.price;
+      showInfoModal(lotSize, price);
     });
   });
 }
 
 // ========== MODAL DE INFORMACIÓN ==========
-function showInfoModal(button) {
-  const card = button.closest('.pricing-card');
-  const lotSize = card.querySelector('.pricing-lot-size').textContent;
-  const price = card.querySelector('.pricing-amount').textContent;
-  
+function showInfoModal(lotSize, price) {
   const modal = document.createElement('div');
   modal.className = 'info-modal';
   modal.innerHTML = `
@@ -535,14 +682,6 @@ function showInfoModal(button) {
       background: #FFA500;
       transform: translateY(-2px);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideUp {
-      from { transform: translateY(50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
   `;
   document.head.appendChild(style);
   
@@ -572,43 +711,6 @@ function initWhatsAppButton() {
       window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     });
   }
-}
-
-// ========== CONTADOR ANIMADO ==========
-function initCounterAnimation() {
-  const counters = document.querySelectorAll('.lot-size, .pricing-amount');
-  
-  const animateCounter = (element) => {
-    const text = element.textContent;
-    const number = text.match(/\d+/);
-    
-    if (number) {
-      const target = parseInt(number[0]);
-      const duration = 2000;
-      const increment = target / (duration / 16);
-      let current = 0;
-      
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
-        element.textContent = text.replace(/\d+/, Math.floor(current).toLocaleString());
-      }, 16);
-    }
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !entry.target.dataset.animated) {
-        entry.target.dataset.animated = 'true';
-        animateCounter(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  counters.forEach(counter => observer.observe(counter));
 }
 
 // ========== PARALLAX EFFECT ==========
@@ -712,53 +814,6 @@ function initFloatingImageAnimation() {
   });
 }
 
-// ========== LAZY LOADING IMAGES ==========
-function initLazyLoading() {
-  const images = document.querySelectorAll('img[loading="lazy"]');
-  
-  if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-          }
-          imageObserver.unobserve(img);
-        }
-      });
-    });
-
-    images.forEach(img => imageObserver.observe(img));
-  }
-}
-
-// ========== INICIALIZAR TODO ==========
-document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar componentes
-  new HeroCarousel();
-  new PricingCarousel();
-  new TestimonialsCarousel();
-  
-  initMobileMenu();
-  initSmoothScroll();
-  initNavbarScroll();
-  initFormValidation();
-  initScrollAnimations();
-  initCTAButtons();
-  initWhatsAppButton();
-  initCounterAnimation();
-  initParallax();
-  initActiveNavigation();
-  initScrollToTop();
-  initFloatingImageAnimation();
-  initLazyLoading();
-  
-  // Log para confirmar inicialización
-  console.log('✅ Pacific Beach - Website inicializado correctamente');
-});
-
 // ========== MENÚ MÓVIL ==========
 function initMobileMenu() {
   const menuToggle = document.querySelector('.mobile-menu-toggle');
@@ -773,7 +828,6 @@ function initMobileMenu() {
     document.body.style.overflow = navWrapper.classList.contains('active') ? 'hidden' : '';
   });
   
-  // Cerrar menú al hacer clic en un enlace
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       menuToggle.classList.remove('active');
@@ -782,7 +836,6 @@ function initMobileMenu() {
     });
   });
   
-  // Cerrar menú al hacer clic fuera
   document.addEventListener('click', (e) => {
     if (!navWrapper.contains(e.target) && !menuToggle.contains(e.target) && navWrapper.classList.contains('active')) {
       menuToggle.classList.remove('active');
@@ -791,6 +844,28 @@ function initMobileMenu() {
     }
   });
 }
+
+// ========== INICIALIZAR TODO ==========
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar componentes
+  new HeroCarousel();
+  window.offerModal = new OfferModal();
+  new TestimonialsCarousel();
+  
+  initMobileMenu();
+  initSmoothScroll();
+  initNavbarScroll();
+  initFormValidation();
+  initScrollAnimations();
+  initCTAButtons();
+  initWhatsAppButton();
+  initParallax();
+  initActiveNavigation();
+  initScrollToTop();
+  initFloatingImageAnimation();
+  
+  console.log('✅ Pacific Beach - Website inicializado correctamente');
+});
 
 // ========== MANEJO DE RESIZE ==========
 let resizeTimer;
