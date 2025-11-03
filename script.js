@@ -184,19 +184,19 @@ class OfferModal {
             <h3>Beneficios Exclusivos</h3>
             <ul class="benefits-list">
               <li class="benefit-item">
-                <span class="benefit-icon">💰</span>
+                <span class="benefit-icon"></span>
                 <span>30% de descuento garantizado</span>
               </li>
               <li class="benefit-item">
-                <span class="benefit-icon">📅</span>
+                <span class="benefit-icon"></span>
                 <span>Precio congelado hasta diciembre 2025</span>
               </li>
               <li class="benefit-item">
-                <span class="benefit-icon">⭐</span>
+                <span class="benefit-icon"></span>
                 <span>Ubicación premium con vista al mar</span>
               </li>
               <li class="benefit-item">
-                <span class="benefit-icon">💳</span>
+                <span class="benefit-icon"></span>
                 <span>Planes de pago flexibles sin intereses</span>
               </li>
             </ul>
@@ -1425,4 +1425,5 @@ console.log(
 console.log(
   '%c¿Interesado en trabajar con nosotros? Envía tu CV a admin@pacificbeach.pe',
   'color: #0A3A5C; font-size: 12px; font-style: italic;'
+
 );
