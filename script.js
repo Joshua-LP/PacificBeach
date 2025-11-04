@@ -1464,6 +1464,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Soporte táctil para Gallery Cards
+    const galleryCards = document.querySelectorAll('.gallery-card');
+    
+    if (isTouchDevice) {
+        galleryCards.forEach(card => {
+            card.addEventListener('touchstart', function(e) {
+                if (!e.target.closest('a')) {
+                    e.preventDefault();
+                }
+                
+                galleryCards.forEach(c => {
+                    if (c !== card) {
+                        c.classList.remove('touch-active');
+                    }
+                });
+                
+                card.classList.toggle('touch-active');
+            });
+        });
+        
+        document.addEventListener('touchstart', function(e) {
+            if (!e.target.closest('.gallery-card')) {
+                galleryCards.forEach(card => {
+                    card.classList.remove('touch-active');
+                });
+            }
+        });
+    }
+    
+    // Smooth scroll para la flecha
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', function() {
+            const surfGallery = document.querySelector('.surf-gallery-section');
+            if (surfGallery) {
+                surfGallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
+    
     // Animación de scroll para la sección de surf
     const observerOptions = {
         threshold: 0.2,
