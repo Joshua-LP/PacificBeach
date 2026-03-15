@@ -46,6 +46,16 @@ El sitio web presenta los proyectos disponibles, planes de financiamiento y una 
 
 ---
 
+## 🤖 Modelos de IA
+
+Este proyecto ha sido desarrollado con la asistencia de **Claude Code** (Claude Sonnet 4.5).
+
+Para más información sobre los modelos de IA disponibles y sus capacidades, consulta la documentación detallada:
+
+📄 **[Ver Modelos de IA Disponibles](MODELOS_IA.md)**
+
+---
+
 ## 📁 Estructura del Proyecto
 
 ```
